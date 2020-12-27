@@ -13,9 +13,7 @@ else {
 }
 const regionSize = 256
 
-function difference(valA, valB) {
-  return Math.max(valA, valB) - Math.min(valA, valB)
-}
+const difference = (a, b) => Math.abs(a - b)
 
 fs.readdir(targetFolder, async(err, files) => {
   if(err)
