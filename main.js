@@ -107,7 +107,11 @@ fs.readdir(targetFolder, async(err, files) => {
   fs.writeFile(outputFilePath, completeImage, "base64", e => {
     if(e)
       console.log(e)
-    console.log(`Output file: ${outputFilePath}`)
+    
+    console.log("\nMap complete.\n=====")
+    console.log(`Output file: ${path.join(__dirname, outputFilePath)}`)
+    console.log(`The dimensions of the compiled map are W: ${width} H: ${height}.`)
+    console.log(`The coordinates 0,0 are ${originPixelLocation ? "at pixel " + originPixelLocation.join(",") : "not in the map"}.`)
     process.exit()
   })
 })
