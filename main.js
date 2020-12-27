@@ -69,6 +69,8 @@ fs.readdir(targetFolder, async(err, files) => {
   fs.writeFile(path.join("./", "out.png"), completeImage, "base64", e => {
     if(err)
       console.log(err)
+    if(e)
+      console.log(e)
     console.log("done")
   })
 })
