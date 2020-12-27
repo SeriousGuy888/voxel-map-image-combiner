@@ -79,10 +79,11 @@ fs.readdir(targetFolder, async(err, files) => {
 
   //Save PNG file
   const completeImage = await screenshotCanvas(canvas)
-  fs.writeFile(path.join(`${outputDir}/`, `${currentTimeString()}.png`), completeImage, "base64", e => {
+  const outputFilePath = path.join(`${outputDir}/`, `${currentTimeString()}.png`)
+  fs.writeFile(outputFilePath, completeImage, "base64", e => {
     if(e)
       console.log(e)
-    console.log("done")
+    console.log(`Output file: ${outputFilePath}`)
     process.exit()
   })
 })
