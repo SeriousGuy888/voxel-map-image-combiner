@@ -32,7 +32,7 @@ if(!fs.existsSync(outputDir)) { // if output folder does not exist
 
 const regionSize = 256
 
-const difference = (a, b) => Math.abs(a - b)
+const difference = (a, b) => Math.max(a, b) - Math.min(a, b)
 const currentTimeString = () => {
   const date = new Date()
   return date.toISOString()
