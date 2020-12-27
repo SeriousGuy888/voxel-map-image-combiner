@@ -11,9 +11,22 @@ if(process.argv[2]) {
 else {
   console.error(`please provide the path to your voxelmap image output folder (..\\z1)`)
 }
+
+const outputDir = "./output"
+if(!fs.existsSync(outputDir)) { // if output folder does not exist
+  fs.mkdirSync(outputDir) // create output folder
+}
+
+
 const regionSize = 256
 
 const difference = (a, b) => Math.abs(a - b)
+const currentTimeString = () => {
+  const date = new Date()
+  return date.toISOString()
+    .replace(/:/g, "-")
+    .replace(/T/g, "_")
+}
 
 fs.readdir(targetFolder, async(err, files) => {
   if(err)
@@ -66,9 +79,7 @@ fs.readdir(targetFolder, async(err, files) => {
 
   //Save PNG file
   const completeImage = await screenshotCanvas(canvas)
-  fs.writeFile(path.join("./", "out.png"), completeImage, "base64", e => {
-    if(err)
-      console.log(err)
+  fs.writeFile(path.join(`${outputDir}/`, `${currentTimeString()}.png`), completeImage, "base64", e => {
     if(e)
       console.log(e)
     console.log("done")
