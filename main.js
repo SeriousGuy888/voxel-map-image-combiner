@@ -51,6 +51,7 @@ fs.readdir(targetFolder, async(err, files) => {
     console.log(`Creating canvas with width = ${width}, height = ${height}`)
     let canvas = await createCanvas(width,height)
     let ctx = await canvas.getContext('2d')
+    ctx.fillRect(0, 0, width, height) // black background
     //Loop through each image file, load it, and draw it to the canvas
     for(let fileName of files){
         //Get path to file
