@@ -83,5 +83,6 @@ fs.readdir(targetFolder, async(err, files) => {
     if(e)
       console.log(e)
     console.log("done")
+    process.exit()
   })
 })
