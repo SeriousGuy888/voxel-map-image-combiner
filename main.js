@@ -1,11 +1,11 @@
 const { createCanvas, loadImage ,screenshotCanvas} = require('puppet-canvas')
-const path = require('path');
+const path = require('path')
 const fs = require('fs')
 const imageDataURI = require('image-data-uri')
 
 let targetFolder = null
 if(process.argv[2]){
-    targetFolder = process.argv[2];
+    targetFolder = process.argv[2]
     console.log(`Target folder = ${targetFolder}`)
 }else{
     console.error(`please provide the path to your voxelmap image output folder (..\\z1)`)
@@ -41,7 +41,7 @@ fs.readdir(targetFolder, async(err, files) => {
         if(y < MinY){
             MinY = y
         }
-    };
+    }
 
     console.log(`Located edge regions, FirstX = ${MinX}, LastX = ${MaxX}, FirstY = ${MinY} LastY = ${MaxY}`)
     let baseX = MinX * -1
@@ -68,14 +68,14 @@ fs.readdir(targetFolder, async(err, files) => {
         let pixY = (baseY+y)*regionSize
         ctx.drawImage(image, pixX, pixY, regionSize, regionSize)
         console.log("drew",fileName)
-    };
+    }
 
     //Save PNG file
-    const image = await screenshotCanvas(canvas)
-    const out = fs.writeFile(path.join("./","out.png"), image, 'base64', function(err) {
+    const completeImage = await screenshotCanvas(canvas)
+    fs.writeFile(path.join("./","out.png"), completeImage, 'base64', e => {
         if(err){
-            console.log(err);
+            console.log(err)
         }
         console.log('done')
-    });
+    })
 })
