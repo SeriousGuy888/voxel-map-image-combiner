@@ -72,14 +72,14 @@ fs.readdir(targetFolder, async(err, files) => {
   let ctx = await canvas.getContext("2d")
   ctx.fillRect(0, 0, width, height) // black background
   //Loop through each image file, load it, and draw it to the canvas
-  for(let fileName of files) {
+  for(const i in files) {
     //Get path to file
-    let filePath = path.join(targetFolder, fileName)
+    let filePath = path.join(targetFolder, files[i])
     //Load image
     let imageData = await imageDataURI.encodeFromFile(filePath)
     let image = await loadImage(imageData, canvas)
     //Find region coordinates from the filename
-    let regionCoords = fileName.split(",")
+    let regionCoords = files[i].split(",")
     let x = parseInt(regionCoords[0])
     let y = parseInt(regionCoords[1])
     //Draw image to canvas
@@ -87,7 +87,7 @@ fs.readdir(targetFolder, async(err, files) => {
     let pixY = (baseY + y) * regionSize
 
     ctx.drawImage(image, pixX, pixY, regionSize, regionSize)
-    if(fileName === "0,0.png") {
+    if(files[i] === "0,0.png") {
       originPixelLocation = [pixX, pixY]
       if(originFill) { // if a marker at 0,0 is needed and file is 0,0
         ctx.fillStyle = originFill
@@ -98,7 +98,7 @@ fs.readdir(targetFolder, async(err, files) => {
         ctx.closePath()
       }
     }
-    console.log("drew", fileName)
+    console.log(`Drew ${files[i]} (${parseInt(i) + 1}/${files.length})`)
   }
 
   //Save PNG file
