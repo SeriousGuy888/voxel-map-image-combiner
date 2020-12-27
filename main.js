@@ -1,16 +1,28 @@
-const { createCanvas, loadImage, screenshotCanvas} = require("puppet-canvas")
+const { createCanvas, loadImage, screenshotCanvas } = require("puppet-canvas")
 const path = require("path")
 const fs = require("fs")
 const imageDataURI = require("image-data-uri")
 
-let targetFolder = null
-if(process.argv[2]) {
-  targetFolder = process.argv[2]
+let targetFolder
+
+const args = process.argv.slice(2) // in ["node", "main.js", "<path>", "<other>"], return ["<path>", "<other>"]
+if(args[0]) {
+  targetFolder = args[0]
   console.log(`Target folder = ${targetFolder}`)
 }
-else {
-  console.error(`please provide the path to your voxelmap image output folder (..\\z1)`)
+else
+  console.error("Syntax: `node main.js <path>` (..\\z1)")
+
+let originFill = args[1] // fill colour of 0,0 coordinate on map
+let originRadius = parseInt(args[2]) || 10 // how large to make the circle at 0,0
+
+let originPixelLocation = []
+
+if(originFill && !originFill.startsWith("#")) {
+  console.error("Origin fill parameter must begin with `#`. (e.g: `#ffff0080`)")
+  process.exit()
 }
+
 
 const outputDir = "./output"
 if(!fs.existsSync(outputDir)) { // if output folder does not exist
@@ -73,7 +85,19 @@ fs.readdir(targetFolder, async(err, files) => {
     //Draw image to canvas
     let pixX = (baseX + x) * regionSize
     let pixY = (baseY + y) * regionSize
+
     ctx.drawImage(image, pixX, pixY, regionSize, regionSize)
+    if(fileName === "0,0.png") {
+      originPixelLocation = [pixX, pixY]
+      if(originFill) { // if a marker at 0,0 is needed and file is 0,0
+        ctx.fillStyle = originFill
+  
+        ctx.beginPath()
+        ctx.arc(pixX, pixY, originRadius, 0, 2 * Math.PI)
+        ctx.fill()
+        ctx.closePath()
+      }
+    }
     console.log("drew", fileName)
   }
 
