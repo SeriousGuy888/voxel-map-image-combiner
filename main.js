@@ -10,8 +10,10 @@ if(args[0]) {
   targetFolder = args[0]
   console.log(`Target folder = ${targetFolder}`)
 }
-else
-  console.error("Syntax: `node main.js <path>` (..\\z1)")
+else {
+  console.error("Syntax: `node main.js \"<path>\" [origin marker colour] [origin marker radius]`")
+  return
+}
 
 let originFill = args[1] // fill colour of 0,0 coordinate on map
 let originRadius = parseInt(args[2]) || 10 // how large to make the circle at 0,0
