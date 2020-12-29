@@ -43,6 +43,8 @@ const currentTimeString = () => {
 }
 
 fs.readdir(targetFolder, async(err, files) => {
+  const startTime = new Date()
+
   if(err)
     console.log(`Error: ${err}`)
   let minX = Infinity
@@ -64,6 +66,8 @@ fs.readdir(targetFolder, async(err, files) => {
       minY = y
   }
 
+  let eachImageTimeTaken = []
+
   console.log(`Located edge regions, FirstX = ${minX}, LastX = ${maxX}, FirstY = ${minY} LastY = ${maxY}`)
   let baseX = minX * -1
   let baseY = minY * -1
@@ -75,6 +79,7 @@ fs.readdir(targetFolder, async(err, files) => {
   ctx.fillRect(0, 0, width, height) // black background
   //Loop through each image file, load it, and draw it to the canvas
   for(const i in files) {
+    const fileStartTime = new Date()
     //Get path to file
     let filePath = path.join(targetFolder, files[i])
     //Load image
@@ -100,7 +105,9 @@ fs.readdir(targetFolder, async(err, files) => {
         ctx.closePath()
       }
     }
-    console.log(`Drew ${files[i]} (${parseInt(i) + 1}/${files.length})`)
+    let fileElapsedTime = new Date() - fileStartTime
+    eachImageTimeTaken.push(fileElapsedTime)
+    console.log(`Drew ${files[i]} in ${fileElapsedTime}ms (${parseInt(i) + 1}/${files.length})`)
   }
 
   //Save PNG file
@@ -110,10 +117,16 @@ fs.readdir(targetFolder, async(err, files) => {
     if(e)
       console.log(e)
     
-    console.log("\nMap complete.\n=====")
-    console.log(`Output file: ${path.join(__dirname, outputFilePath)}`)
-    console.log(`The dimensions of the compiled map are W: ${width} H: ${height}.`)
-    console.log(`The coordinates 0,0 are ${originPixelLocation ? "at pixel " + originPixelLocation.join(",") : "not in the map"}.`)
+    console.log([
+      "\nMap complete.",
+      `Output file: ${path.join(__dirname, outputFilePath)}`,
+      "=====",
+      `Total time elapsed: ${new Date() - startTime}ms`,
+      `Average time for each file: ${~~((eachImageTimeTaken.reduce((a, b) => a + b, 0)) / eachImageTimeTaken.length)}ms`,
+      "=====",
+      `The dimensions of the compiled map are ${width}x${height}.`,
+      `The coordinates 0,0 are ${originPixelLocation ? "at pixel " + originPixelLocation.join(",") : "not in the map"}.`,
+    ].join("\n"))
     process.exit()
   })
 })
