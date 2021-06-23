@@ -127,6 +127,6 @@ fs.readdir(targetFolder, async(err, files) => {
       `The dimensions of the compiled map are ${width}x${height}.`,
       `The coordinates 0,0 are ${originPixelLocation ? "at pixel " + originPixelLocation.join(",") : "not in the map"}.`,
     ].join("\n"))
-    process.exit()
+    process.exit(0)
   })
 })
